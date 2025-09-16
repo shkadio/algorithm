@@ -35,38 +35,41 @@ Game 2:
     (7,0)
 */
 
-
-//对于A:按照索引一个一个比较即可
-//对于B:如果当前数字在答案序列中且位置不对，记为1
-// 统计所有的这样的数字，存在数组中，并与A比较，如果存在A数组中，减去该数字
-// 复杂了
+// 对于A:按照索引一个一个比较即可
+// 对于B:如果当前数字在答案序列中且位置不对，记为1
+//  统计所有的这样的数字，存在数组中，并与A比较，如果存在A数组中，减去该数字
+//  复杂了
 
 // 先统计A:如果存在标记为A的数字，将其从答案序列中删除
 // 再计算B：索引相同，数字不同，在序列中找，找到+1
 
 #include <stdio.h>
 #define maxn 100
-int a[maxn],b[maxn];
+int a[maxn], b[maxn];
 int main(){
-    int n,count,A = 0,B = 0;
-    while(scanf("%d",&n) == 1){
-        for(int i = 0;i<n;i++){
-            scanf("%d",&a[i]);
-            if(a[i] == 0) count++;
-        }
-        if(count == n) continue;    // 如果是n个0,该组数据结束
-        int x = 0,arr[maxn];
-        while(scanf("%d",&b[x]) == 1){
-            // 统计A的个数
-            if(a[x] == b[x]) {
-                A++;
-                arr[x] = 0;
+    int n, kase = 0;
+    while (scanf("%d", &n) == 1 && n){
+        printf("Game %d:\n", ++kase);
+        // 读入答案序列
+        for (int i = 0; i < n; i++)     scanf("%d", &a[i]);
+        for (;;){
+            int i = 0, A = 0, B = 0;
+            // 读入猜测序列
+            for (int i = 0; i < n; i++){
+                scanf("%d", &b[i]);
+                if (b[i] == a[i])   A++;
             }
-            else arr[x] = a[x];
-            x++;
-
+            if (b[0] == 0)  break;
+            for (int i = 1; i <= 9; i++){
+                int c1 = 0, c2 = 0; // 统计i在答案序列和猜测序列中出现的次数
+                for (int j = 0; j < n; j++){
+                    if (a[j] == i)  c1++;
+                    if (b[j] == i)  c2++;
+                }
+                if (c1 > c2)    B += c2; else    B += c1;
+            }
+            printf("\t(%d,%d)\n", A, B-A);
         }
-
     }
     return 0;
 }
